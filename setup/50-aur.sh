@@ -17,7 +17,9 @@ else
 fi
 
 header "Pacotes AUR"
-for pkg in visual-studio-code-bin spotify google-chrome slack-desktop obsidian; do
+# Lista vazia por enquanto — adicione aqui seus AUR packages
+AUR_PACKAGES=()
+for pkg in "${AUR_PACKAGES[@]}"; do
   pacman -Q "$pkg" &>/dev/null && ok "$pkg" || {
     sudo -u "$USER" paru -S --noconfirm "$pkg" || warn "Falha: $pkg"
   }
