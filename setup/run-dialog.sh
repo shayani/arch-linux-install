@@ -5,6 +5,11 @@ set -euo pipefail
 DIR=$(cd "$(dirname "$0")" && pwd)
 source "$DIR/lib.sh"
 
+# Strip ANSI escape codes for dialog display
+strip_ansi() {
+  sed -E 's/\x1b\[[0-9;]*[a-zA-Z]//g'
+}
+
 # Garantir que dialog está instalado
 if ! command -v dialog &>/dev/null; then
   echo "Instalando dialog para interface gráfica..."
@@ -52,14 +57,14 @@ for ((i=0; i<TOTAL; i+=2)); do
   fi
 
   if [[ $exitcode -eq 0 ]]; then
-    dialog --title "✓ $num" --msgbox "$(echo "$output" | tail -5)" 10 60
+    dialog --title "✓ $num" --msgbox "$(echo "$output" | strip_ansi | tail -5)" 10 60
   else
-    dialog --title "✗ $num - FALHOU" --msgbox "$(echo "$output" | tail -10)\n\nExecute novamente: sudo bash run-dialog.sh $num" 12 60
+    dialog --title "✗ $num - FALHOU" --msgbox "$(echo "$output" | strip_ansi | tail -10)\n\nExecute novamente: sudo bash run-dialog.sh $num" 12 60
     exit 1
   fi
 done
 
 dialog --title "Concluído!" \
   --msgbox "Pós-instalação finalizada!\n\nReinicie o sistema e inicie o Hyprland." \
-   8 40
+  8 40
 clear
