@@ -8,7 +8,7 @@ warn()  { echo -e "${YELLOW}[!]${NC} $1"; }
 err()   { echo -e "${RED}[✗]${NC} $1"; exit 1; }
 header(){ echo -e "\n${BOLD}━━━ $1 ━━━${NC}\n"; }
 
-USER="${USER:-shayani}"
+USER="${SUDO_USER:-${USER:-shayani}}"
 
 pacotes() {
   local missing=()

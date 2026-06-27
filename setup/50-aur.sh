@@ -8,8 +8,8 @@ if ! command -v paru &>/dev/null; then
   rm -rf /tmp/paru-bin
   cd /tmp
   git clone https://aur.archlinux.org/paru-bin.git
-  chown -R "$USER": paru-bin 2>/dev/null || true
-  cd paru-bin && sudo -u "$USER" makepkg -si --noconfirm
+  chown -R "$SUDO_USER": paru-bin 2>/dev/null || true
+  cd paru-bin && sudo -u "$SUDO_USER" makepkg -si --noconfirm
   cd / && rm -rf /tmp/paru-bin
   ok "paru instalado"
 else
