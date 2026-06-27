@@ -10,3 +10,4 @@ pacotes git curl wget rsync base-devel man-db man-pages
 pacotes brightnessctl pavucontrol grim slurp swappy
 pacotes wl-clipboard cliphist swaylock swayidle
 pacotes ttf-jetbrains-mono-nerd noto-fonts-emoji
+pacotes chezmoi
