@@ -31,7 +31,7 @@ KERNEL="${KERNEL:-linux}"
 FILESYSTEM="${FILESYSTEM:-btrfs}"
 SWAP_SIZE="${SWAP_SIZE:-4G}"
 GPU="${GPU:-auto}"
-AUR_HELPER="${AUR_HELPER:-paru}"
+AUR_HELPER="${AUR_HELPER:-yay}"
 DOTFILES_REPO="${DOTFILES_REPO:-https://github.com/shayani/dotfiles.git}"
 CHEZMOI_INSTALL="${CHEZMOI_INSTALL:-aur}"
 
@@ -175,6 +175,7 @@ PACKAGES=(
   wl-clipboard cliphist
   swaylock swayidle
   bluez bluez-utils
+  docker docker-compose
   man-db man-pages
 )
 
@@ -236,7 +237,7 @@ mkinitcpio -P
 echo "root:$PASSWORD" | chpasswd
 
 # User
-useradd -m -G wheel,audio,video,storage,optical -s /bin/bash $USERNAME
+useradd -m -G wheel,audio,video,storage,optical,docker -s /bin/bash $USERNAME
 echo "$USERNAME:$PASSWORD" | chpasswd
 
 # Sudo
@@ -247,6 +248,7 @@ echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 # Enable services
 systemctl enable NetworkManager
 systemctl enable bluetooth
+systemctl enable docker
 systemctl enable fstrim.timer
 
 # NVIDIA DRM mode-setting

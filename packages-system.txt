@@ -48,6 +48,9 @@ swaylock swayidle
 # Bluetooth
 bluez bluez-utils
 
+# Containers
+docker docker-compose
+
 # Snapshots
 snapper snap-pac
 

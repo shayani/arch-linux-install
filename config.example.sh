@@ -31,4 +31,4 @@ DOTFILES_REPO="https://github.com/shayani/dotfiles.git"
 CHEZMOI_INSTALL="aur"            # aur or binary
 
 # AUR helper
-AUR_HELPER="paru"                # paru or yay
+AUR_HELPER="yay"                 # yay or paru
