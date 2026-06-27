@@ -5,6 +5,7 @@ DIR=$(cd "$(dirname "$0")" && pwd); source "$DIR/lib.sh"
 
 header "AUR helper (paru)"
 if ! command -v paru &>/dev/null; then
+  rm -rf /tmp/paru-bin
   cd /tmp
   git clone https://aur.archlinux.org/paru-bin.git
   chown -R "$USER": paru-bin 2>/dev/null || true
