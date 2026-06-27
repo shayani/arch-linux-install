@@ -7,9 +7,9 @@ set -euo pipefail
 # Allow passwordless sudo for AUR installation
 echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-su $USERNAME -c "cd /home/$USERNAME && git clone https://aur.archlinux.org/$AUR_HELPER-bin.git"
-su $USERNAME -c "cd /home/$USERNAME/$AUR_HELPER-bin && makepkg -si --noconfirm"
-rm -rf "/home/$USERNAME/$AUR_HELPER-bin"
+su $USERNAME -c "cd /home/$USERNAME && git clone https://aur.archlinux.org/paru-bin.git"
+su $USERNAME -c "cd /home/$USERNAME/paru-bin && makepkg -si --noconfirm"
+rm -rf "/home/$USERNAME/paru-bin"
 
 if [[ "$CHEZMOI_INSTALL" == "aur" ]]; then
   su $USERNAME -c "$AUR_HELPER -S --noconfirm chezmoi"
