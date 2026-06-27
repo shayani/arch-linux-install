@@ -4,6 +4,9 @@ run_aur_chezmoi() {
   arch-chroot /mnt /bin/bash <<EOF
 set -euo pipefail
 
+# Allow passwordless sudo for AUR installation
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 su $USERNAME -c "cd /home/$USERNAME && git clone https://aur.archlinux.org/$AUR_HELPER-bin.git"
 su $USERNAME -c "cd /home/$USERNAME/$AUR_HELPER-bin && makepkg -si --noconfirm"
 rm -rf "/home/$USERNAME/$AUR_HELPER-bin"
