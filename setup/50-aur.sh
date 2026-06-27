@@ -21,6 +21,10 @@ header "Pacotes AUR"
 AUR_PACKAGES=()
 for pkg in "${AUR_PACKAGES[@]}"; do
   pacman -Q "$pkg" &>/dev/null && ok "$pkg" || {
-    sudo -u "$USER" paru -S --noconfirm "$pkg" || warn "Falha: $pkg"
+    sudo -u "$SUDO_USER" paru -S --noconfirm "$pkg" || warn "Falha: $pkg"
   }
 done
+
+# Chezmoi (pacote oficial)
+header "Chezmoi"
+pacotes chezmoi
