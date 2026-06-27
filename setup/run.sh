@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 # run.sh - Pós-instalação Arch Workstation
-# Executa cada módulo em ordem. Se um falhar, corrija e rode novamente.
-# Uso: sudo bash run.sh [NÚMERO]
-#   sudo bash run.sh          # executa todos
-#   sudo bash run.sh 50       # executa só o 50-aur.sh
+# Uso: sudo bash run.sh [NUMERO]
 set -euo pipefail
 
 DIR=$(cd "$(dirname "$0")" && pwd)
 source "$DIR/lib.sh"
 
-header "Pós-instalação Arch Workstation"
-echo "Usuário: $USER"
+clear 2>/dev/null || true
+echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}  Pós-instalação Arch Workstation${NC}"
+echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo "  Usuário: $USER"
+echo ""
 
 FILTER="${1:-}"
 
@@ -18,18 +19,20 @@ for script in "$DIR"/[0-9][0-9]-*.sh; do
   name=$(basename "$script")
   num=${name:0:2}
 
-  # Se passou um filtro, executa só aquele
   [[ -n "$FILTER" ]] && [[ "$num" != "$FILTER" ]] && continue
 
   echo ""
   echo -e "${BOLD}▸ $name${NC}"
+  echo -e "${BOLD}  $(printf '=%.0s' {1..50})${NC}"
+  
   if bash "$script"; then
-    ok "$name concluído"
+    ok "$name finalizado"
   else
-    warn "$name FALHOU — corrija e rode: sudo bash run.sh $num"
+    echo -e "${YELLOW}  └─ $name FALHOU ─ corrija e rode: sudo bash run.sh $num${NC}"
   fi
 done
 
 echo ""
-header "Concluído!"
-echo "Reinicie e inicie o Hyprland com: Hyprland"
+echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
+echo -e "${BOLD}  Concluído! Reinicie e inicie Hyprland${NC}"
+echo -e "${BOLD}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
