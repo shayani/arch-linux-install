@@ -1,0 +1,9 @@
+# AUR packages (installed after chezmoi)
+# One package per line
+
+visual-studio-code-bin
+nerd-fonts-fira-code
+spotify
+google-chrome
+slack-desktop
+obsidian

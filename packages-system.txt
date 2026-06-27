@@ -1,0 +1,55 @@
+# Packages installed via pacstrap
+# These are already in install.sh; this file is for reference/customization
+
+# Core
+base base-devel linux linux-firmware
+
+# Microcode
+amd-ucode
+# intel-ucode
+
+# Filesystem
+btrfs-progs dosfstools
+
+# Tools
+sudo nano vim git curl wget rsync
+
+# Network
+networkmanager nm-connection-editor
+
+# Audio
+pipewire pipewire-pulse pipewire-alsa wireplumber
+
+# GPU (NVIDIA)
+# nvidia-dkms nvidia-settings nvidia-utils libva-nvidia-driver
+
+# Hyprland
+hyprland waybar rofi-wayland alacritty
+dunst libnotify
+
+# File manager
+thunar thunar-archive-plugin file-roller
+
+# Fonts
+ttf-jetbrains-mono-nerd noto-fonts-emoji ttf-font-awesome
+
+# Portal / polkit
+polkit-kde-agent xdg-desktop-portal-hyprland
+
+# Qt/Wayland
+qt5-wayland qt6-wayland
+
+# Utils
+brightnessctl pavucontrol
+grim slurp swappy
+wl-clipboard cliphist
+swaylock swayidle
+
+# Bluetooth
+bluez bluez-utils
+
+# Snapshots
+snapper snap-pac
+
+# Documentation
+man-db man-pages
