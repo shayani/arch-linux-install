@@ -8,7 +8,7 @@ build_package_list() {
     networkmanager nm-connection-editor
     pipewire pipewire-pulse pipewire-alsa wireplumber
     sof-firmware alsa-utils
-    hyprland waybar rofi-wayland alacritty
+    hyprland waybar rofi-wayland
     hyprlauncher
     dunst libnotify
     thunar thunar-archive-plugin file-roller

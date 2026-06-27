@@ -25,7 +25,7 @@ sof-firmware alsa-utils
 # nvidia-dkms nvidia-settings nvidia-utils libva-nvidia-driver
 
 # Hyprland
-hyprland waybar rofi-wayland alacritty
+hyprland waybar rofi-wayland
 hyprlauncher
 dunst libnotify
 
