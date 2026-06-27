@@ -16,11 +16,13 @@ export DOTFILES_REPO="https://github.com/shayani/dotfiles.git"
 export CHEZMOI_INSTALL="binary"
 export AUR_HELPER="yay"
 
-TMPDIR=$(mktemp -d /tmp/arch-install.XXXXXXXXXX)
-curl -fsSL "http://192.168.122.1:8000/install.sh" -o "$TMPDIR/install.sh"
-mkdir -p "$TMPDIR/lib"
+# Download installer + lib files
+TMP=$(mktemp -d)
+echo "Downloading installer..."
+curl -fsSL "http://192.168.122.1:8000/install.sh" -o "$TMP/install.sh"
+mkdir -p "$TMP/lib"
 for mod in helpers preflight disk system user bootloader finalize; do
-  curl -fsSL "http://192.168.122.1:8000/lib/${mod}.sh" -o "$TMPDIR/lib/${mod}.sh"
+  curl -fsSL "http://192.168.122.1:8000/lib/${mod}.sh" -o "$TMP/lib/${mod}.sh"
 done
 
-bash "$TMPDIR/install.sh"
+cd "$TMP" && bash install.sh

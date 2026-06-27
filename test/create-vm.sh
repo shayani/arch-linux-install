@@ -42,11 +42,9 @@ fi
 # Detect if we have a graphical session (for virt-viewer)
 if [[ -n "${DISPLAY:-}" ]] || [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
   GRAPHICS="spice"
-  VIDEO="virtio"
-  EXTRA="--video virtio"
+  EXTRA="--video virtio --serial pty --console pty,target_type=virtio"
 else
   GRAPHICS="none"
-  VIDEO=""
   EXTRA="--console pty,target_type=serial --serial pty"
 fi
 
@@ -60,6 +58,7 @@ sudo virt-install \
   --os-variant archlinux \
   --network network=default \
   --graphics "$GRAPHICS" \
+  --boot uefi \
   $EXTRA
 
 echo ""
