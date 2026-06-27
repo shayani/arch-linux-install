@@ -6,6 +6,7 @@ RAM="${2:-4096}"
 CPUS="${3:-2}"
 DISK_SIZE="${4:-20G}"
 ISO="${5:-/tmp/archlinux.iso}"
+CONNECT="qemu:///system"
 
 echo "=== Creating VM: $VM_NAME ==="
 echo "  RAM: $RAM | CPUs: $CPUS | Disk: $DISK_SIZE"
@@ -14,7 +15,7 @@ echo ""
 # Ensure libvirtd is running
 if ! systemctl is-active --quiet libvirtd; then
   echo "Starting libvirtd..."
-  sudo systemctl start libvirtd
+  systemctl start libvirtd
 fi
 
 # Download Arch ISO if not present
@@ -23,37 +24,31 @@ if [[ ! -f "$ISO" ]]; then
   curl -fsSLo "$ISO" "https://geo.mirror.pkgbuild.com/iso/latest/archlinux-x86_64.iso"
 fi
 
-# Create disk image
-DISK_PATH="/var/lib/libvirt/images/${VM_NAME}.qcow2"
-if [[ ! -f "$DISK_PATH" ]]; then
-  echo "Creating disk image ($DISK_SIZE)..."
-  sudo qemu-img create -f qcow2 "$DISK_PATH" "$DISK_SIZE"
-fi
-
 # Check if VM already exists
-if virsh dominfo "$VM_NAME" &>/dev/null; then
+if virsh -c "$CONNECT" dominfo "$VM_NAME" &>/dev/null; then
   echo "VM $VM_NAME already exists."
-  echo "  Start:  virsh start $VM_NAME"
-  echo "  Console: virsh console $VM_NAME"
-  echo "  Viewer:  virt-viewer $VM_NAME"
+  echo "  Start:  virsh -c $CONNECT start $VM_NAME"
+  echo "  Console: virsh -c $CONNECT console $VM_NAME"
+  echo "  Delete:  virsh -c $CONNECT undefine $VM_NAME --nvram --remove-all-storage"
   exit 0
 fi
 
-# Detect if we have a graphical session (for virt-viewer)
+# Detect if we have a graphical session
 if [[ -n "${DISPLAY:-}" ]] || [[ -n "${WAYLAND_DISPLAY:-}" ]]; then
-  GRAPHICS="spice"
-  EXTRA="--video virtio --serial pty --console pty,target_type=virtio"
+  GRAPHICS="spice,port=5900,listen=0.0.0.0"
+  EXTRA="--video virtio --serial pty"
 else
   GRAPHICS="none"
-  EXTRA="--console pty,target_type=serial --serial pty"
+  EXTRA="--serial pty"
 fi
 
 echo "Starting VM..."
-sudo virt-install \
+virt-install \
+  --connect "$CONNECT" \
   --name "$VM_NAME" \
   --ram "$RAM" \
   --vcpus "$CPUS" \
-  --disk path="$DISK_PATH",format=qcow2 \
+  --disk path=/var/lib/libvirt/images/${VM_NAME}.qcow2,size=$DISK_SIZE,format=qcow2,sparse=true \
   --cdrom "$ISO" \
   --os-variant archlinux \
   --network network=default \
@@ -64,13 +59,8 @@ sudo virt-install \
 echo ""
 echo "=== VM created ==="
 echo "To connect:"
-if [[ "$GRAPHICS" == "spice" ]]; then
-  echo "  virt-viewer $VM_NAME"
-  echo "Or via SSH: virsh console $VM_NAME"
-else
-  echo "  virsh console $VM_NAME"
-fi
+echo "  spicy -h 127.0.0.1 -p 5900"
 echo "To stop:"
-echo "  virsh destroy $VM_NAME"
+echo "  virsh -c $CONNECT destroy $VM_NAME"
 echo "To delete:"
-echo "  virsh undefine $VM_NAME --remove-all-storage"
+echo "  virsh -c $CONNECT undefine $VM_NAME --nvram --remove-all-storage"
