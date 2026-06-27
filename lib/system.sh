@@ -13,7 +13,7 @@ build_package_list() {
     dunst libnotify
     thunar thunar-archive-plugin file-roller
     ttf-jetbrains-mono-nerd noto-fonts-emoji ttf-font-awesome
-    polkit-kde-agent xdg-desktop-portal-hyprland
+    hyprpolkitagent xdg-desktop-portal-hyprland
     qt5-wayland qt6-wayland
     brightnessctl pavucontrol
     bluetui
