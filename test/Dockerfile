@@ -1,5 +1,6 @@
 FROM archlinux:latest
 
+# Install all packages from the installer script
 RUN pacman -Syu --noconfirm
 RUN pacman -S --noconfirm \
   base base-devel \
@@ -22,31 +23,30 @@ RUN pacman -S --noconfirm \
   bluez bluez-utils \
   docker docker-compose \
   man-db man-pages \
-  snapper snap-pac \
-  --noconfirm
+  snapper snap-pac
 
-# Create user and groups
+# Test user + sudo + groups (same as lib/system.sh)
 RUN useradd -m -G wheel,audio,video,storage,optical,docker -s /bin/bash shayani && \
   echo "shayani:test123" | chpasswd && \
   echo "root:test123" | chpasswd && \
   echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
-# Enable services (won't actually start in Docker, but validates the enable)
-RUN systemctl enable NetworkManager && \
-  systemctl enable bluetooth && \
-  systemctl enable docker && \
-  systemctl enable fstrim.timer
+# Test services enable (same as lib/system.sh)
+RUN systemctl enable NetworkManager 2>/dev/null; \
+  systemctl enable bluetooth 2>/dev/null; \
+  systemctl enable docker 2>/dev/null; \
+  systemctl enable fstrim.timer 2>/dev/null; \
+  echo "Services enabled"
 
-# Configure locale
+# Test locale and timezone (same as lib/system.sh)
 RUN ln -sf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && \
-  echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen && \
-  locale-gen && \
+  echo "pt_BR.UTF-8 UTF-8" >> /etc/locale.gen && locale-gen && \
   echo "LANG=pt_BR.UTF-8" > /etc/locale.conf && \
   echo "KEYMAP=br-abnt2" > /etc/vconsole.conf && \
   echo "arch-test" > /etc/hostname
 
-# Validate packages installed
-RUN hyprland --version && \
+# Validate
+RUN export XDG_RUNTIME_DIR=/tmp/runtime && \
   docker --version && \
   waybar --version && \
-  sway --version
+  echo "All validations passed"

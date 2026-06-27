@@ -15,8 +15,43 @@ curl -fsSL https://raw.githubusercontent.com/shayani/arch-linux-install/main/ins
 ```bash
 curl -LO https://raw.githubusercontent.com/shayani/arch-linux-install/main/config.example.sh
 cp config.example.sh config.sh
-nano config.sh          # edit disk, hostname, etc
-CONFIG_FILE=./config.sh bash <(curl -fsSL https://raw.githubusercontent.com/shayani/arch-linux-install/main/install.sh)
+nano config.sh
+CONFIG_FILE=./config.sh bash install.sh
+```
+
+## Test mode (skip disk operations)
+
+```bash
+# Test the chroot/configuration parts without a real disk
+bash install.sh --skip-disk
+```
+
+Or in Docker:
+
+```bash
+docker build -t arch-install-test test/
+docker run --rm -v $(pwd):/install arch-install-test bash /install/test/test-install.sh
+```
+
+## Project structure
+
+```
+install.sh              # Orchestrator (--skip-disk for testing)
+config.sh               # User configuration (gitignored)
+config.example.sh       # Example config
+lib/
+├── helpers.sh           # Colors, logging, defaults
+├── preflight.sh         # Root/UEFI/network checks, GPU detection
+├── disk.sh              # Partitioning, btrfs subvolumes, mounting
+├── system.sh            # Packages, pacstrap, chroot config
+├── user.sh              # AUR helper, chezmoi, dotfiles
+├── bootloader.sh        # systemd-boot installation
+└── finalize.sh          # fstab, swap, finish message
+test/
+├── Dockerfile           # Builds a test environment with all packages
+└── test-install.sh      # Validates the lib modules
+packages-system.txt      # Reference: official repo packages
+packages-aur.txt         # AUR packages to install after chezmoi
 ```
 
 ## Features
@@ -28,19 +63,10 @@ CONFIG_FILE=./config.sh bash <(curl -fsSL https://raw.githubusercontent.com/shay
 - GPU detection (AMD/Intel/NVIDIA)
 - NVIDIA: DRM mode-setting, nvidia-dkms
 - Hyprland + Wayland stack (pipewire, wireplumber)
-- AUR helper (paru)
+- AUR helper (yay)
+- Docker + docker-compose
 - chezmoi dotfiles bootstrap
 - Snapper + snap-pac for snapshots
-
-## Post-install
-
-```bash
-# Start Hyprland
-Hyprland
-
-# Or install a login manager
-sudo systemctl enable --now sddm
-```
 
 ## Customization
 
@@ -55,4 +81,5 @@ Edit `config.sh` before running. Key variables:
 | `GPU` | `auto` | `auto`, `amd`, `intel`, `nvidia` |
 | `FILESYSTEM` | `btrfs` | `btrfs` or `ext4` |
 | `SWAP_SIZE` | `4G` | Swapfile size |
+| `AUR_HELPER` | `yay` | `yay` or `paru` |
 | `DOTFILES_REPO` | chezmoi repo | Dotfiles to apply |
