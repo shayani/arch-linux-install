@@ -9,14 +9,17 @@ RUN pacman -S --noconfirm \
   btrfs-progs dosfstools \
   sudo nano vim git curl wget rsync \
   networkmanager \
-  pipewire pipewire-pulse wireplumber \
+  pipewire pipewire-pulse pipewire-alsa wireplumber \
+  sof-firmware alsa-utils \
   hyprland waybar rofi-wayland alacritty \
+  hyprlauncher \
   dunst libnotify \
   thunar thunar-archive-plugin file-roller \
   ttf-jetbrains-mono-nerd noto-fonts-emoji \
   polkit-kde-agent xdg-desktop-portal-hyprland \
   qt5-wayland qt6-wayland \
   brightnessctl pavucontrol \
+  bluetui power-profiles-daemon \
   grim slurp swappy \
   wl-clipboard cliphist \
   swaylock swayidle \

@@ -69,9 +69,9 @@ setup_ext4() {
 
 create_swapfile() {
   info "Creating swapfile ($SWAP_SIZE)"
-  truncate -s 0 /mnt/@/swapfile
-  chattr +C /mnt/@/swapfile
-  fallocate -l "$SWAP_SIZE" /mnt/@/swapfile
-  chmod 0600 /mnt/@/swapfile
-  mkswap /mnt/@/swapfile
+  truncate -s 0 /mnt/swapfile
+  chattr +C /mnt/swapfile
+  fallocate -l "$SWAP_SIZE" /mnt/swapfile
+  chmod 0600 /mnt/swapfile
+  mkswap /mnt/swapfile
 }

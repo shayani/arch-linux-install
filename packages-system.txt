@@ -19,12 +19,14 @@ networkmanager nm-connection-editor
 
 # Audio
 pipewire pipewire-pulse pipewire-alsa wireplumber
+sof-firmware alsa-utils
 
 # GPU (NVIDIA)
 # nvidia-dkms nvidia-settings nvidia-utils libva-nvidia-driver
 
 # Hyprland
 hyprland waybar rofi-wayland alacritty
+hyprlauncher
 dunst libnotify
 
 # File manager
@@ -41,6 +43,8 @@ qt5-wayland qt6-wayland
 
 # Utils
 brightnessctl pavucontrol
+bluetui
+power-profiles-daemon
 grim slurp swappy
 wl-clipboard cliphist
 swaylock swayidle

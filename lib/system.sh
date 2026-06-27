@@ -7,13 +7,17 @@ build_package_list() {
     sudo nano vim git curl wget rsync
     networkmanager nm-connection-editor
     pipewire pipewire-pulse pipewire-alsa wireplumber
+    sof-firmware alsa-utils
     hyprland waybar rofi-wayland alacritty
+    hyprlauncher
     dunst libnotify
     thunar thunar-archive-plugin file-roller
     ttf-jetbrains-mono-nerd noto-fonts-emoji ttf-font-awesome
     polkit-kde-agent xdg-desktop-portal-hyprland
     qt5-wayland qt6-wayland
     brightnessctl pavucontrol
+    bluetui
+    power-profiles-daemon
     grim slurp swappy
     wl-clipboard cliphist
     swaylock swayidle
@@ -82,6 +86,7 @@ echo "%wheel ALL=(ALL:ALL) ALL" >> /etc/sudoers
 systemctl enable NetworkManager
 systemctl enable bluetooth
 systemctl enable docker
+systemctl enable power-profiles-daemon
 systemctl enable fstrim.timer
 
 if [[ "$GPU" == "nvidia" ]]; then

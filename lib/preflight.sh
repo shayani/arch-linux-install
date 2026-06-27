@@ -1,9 +1,22 @@
 run_preflight() {
   header "Pre-flight checks"
 
+  info "Checking root privileges..."
   [[ $EUID -eq 0 ]] || err "This script must be run as root"
+  info "✓ Root"
+
+  info "Checking UEFI mode..."
   [[ -d /sys/firmware/efi ]] || err "This script supports UEFI only"
-  ping -c1 -W2 archlinux.org &>/dev/null || err "No internet connection"
+  info "✓ UEFI"
+
+  info "Checking internet connection..."
+  if curl -s --connect-timeout 5 https://archlinux.org >/dev/null 2>&1; then
+    info "✓ Internet"
+  elif ping -c1 -W3 archlinux.org &>/dev/null; then
+    info "✓ Internet (via ping)"
+  else
+    err "No internet connection. Run: dhcpcd"
+  fi
 
   # Detect disk interactively if not set
   if [[ -z "$DISK" ]]; then
@@ -12,9 +25,12 @@ run_preflight() {
     echo ""
     read -rp "Target disk (e.g. /dev/nvme0n1): " DISK
     [[ -b "$DISK" ]] || err "Invalid disk: $DISK"
+  else
+    info "Disk: $DISK"
   fi
 
   # Detect GPU
+  info "Detecting GPU..."
   if [[ "$GPU" == "auto" ]]; then
     if lspci | grep -qi "nvidia"; then
       GPU="nvidia"
@@ -25,8 +41,8 @@ run_preflight() {
     else
       GPU="amd"
     fi
-    info "Detected GPU: ${GPU}"
   fi
+  info "✓ GPU: ${GPU}"
 }
 
 prompt_password() {
